@@ -40,6 +40,11 @@ async def webhook_handler(request: Request):
     print("Payload recebido da Meta:")
     print(payload)
 
+    query_params = request.query_params
+
+    print("Parâmetros da query:")
+    print(query_params)
+
     if not FORWARD_URL:
         print("ERRO: A variável de ambiente FORWARD_URL não está definida.")
         return {"status": "error", "message": "Forward URL not configured"}
@@ -47,7 +52,7 @@ async def webhook_handler(request: Request):
     try:
         # Encaminha o payload para a URL local
         headers = {'Content-Type': 'application/json'}
-        res = requests.post(FORWARD_URL, json=payload, headers=headers)
+        res = requests.post(FORWARD_URL, json=payload, headers=headers, params=query_params)
         res.raise_for_status()  # Lança uma exceção para respostas de erro (4xx ou 5xx)
         
         print(f"Payload encaminhado para {FORWARD_URL} com sucesso.")
