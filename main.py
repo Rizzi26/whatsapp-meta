@@ -38,9 +38,8 @@ async def webhook_handler(request: Request, client_id: str):
     Recebe os eventos do WhatsApp, imprime e encaminha para a URL local.
     """
     payload = await request.json()
-    print("Payload recebido da Meta:")
-    print(payload)
     print(f"Client_id: {client_id}")
+    print("Payload recebido:")
 
     if not FORWARD_URL:
         print("ERRO: A variável de ambiente FORWARD_URL não está definida.")
