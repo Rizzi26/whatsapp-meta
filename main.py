@@ -40,13 +40,6 @@ async def webhook_handler(request: Request):
     print("Payload recebido da Meta:")
     print(payload)
 
-    print(f"URL completa recebida pela Meta: {request.url}")
-
-    query_params = request.url
-
-    print("Parâmetros da query:")
-    print(query_params)
-
     if not FORWARD_URL:
         print("ERRO: A variável de ambiente FORWARD_URL não está definida.")
         return {"status": "error", "message": "Forward URL not configured"}
@@ -54,7 +47,7 @@ async def webhook_handler(request: Request):
     try:
         # Encaminha o payload para a URL local
         headers = {'Content-Type': 'application/json'}
-        res = requests.post(FORWARD_URL, json=payload, headers=headers, params=query_params)
+        res = requests.post(FORWARD_URL, json=payload, headers=headers)
         res.raise_for_status()  # Lança uma exceção para respostas de erro (4xx ou 5xx)
         
         print(f"Payload encaminhado para {FORWARD_URL} com sucesso.")
@@ -68,4 +61,3 @@ async def webhook_handler(request: Request):
 @app.get("/")
 def read_root():
     return {"message": "Servidor FastAPI para webhook do WhatsApp está rodando."}
-
