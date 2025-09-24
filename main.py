@@ -13,11 +13,12 @@ app = FastAPI()
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN")
 FORWARD_URL = os.getenv("FORWARD_URL")
 
-@app.get("/webhook")
-async def webhook_verification(request: Request):
+@app.get("/webhook/{client_id}")
+async def webhook_verification(request: Request, client_id: str):
     """
     Verifica a assinatura do webhook da Meta.
     """
+    print(f"Verificando webhook para client_id: {client_id}")
     # Extrai os parâmetros da query
     mode = request.query_params.get("hub.mode")
     token = request.query_params.get("hub.verify_token")
@@ -31,14 +32,15 @@ async def webhook_verification(request: Request):
         print("Webhook verification failed.")
         raise HTTPException(status_code=403, detail="Verification token mismatch.")
 
-@app.post("/webhook")
-async def webhook_handler(request: Request):
+@app.post("/webhook/{client_id}")
+async def webhook_handler(request: Request, client_id: str):
     """
     Recebe os eventos do WhatsApp, imprime e encaminha para a URL local.
     """
     payload = await request.json()
     print("Payload recebido da Meta:")
     print(payload)
+    print(f"Client_id: {client_id}")
 
     if not FORWARD_URL:
         print("ERRO: A variável de ambiente FORWARD_URL não está definida.")
