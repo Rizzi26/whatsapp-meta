@@ -40,7 +40,9 @@ async def webhook_handler(request: Request):
     print("Payload recebido da Meta:")
     print(payload)
 
-    query_params = request.query_params.get("client_id")
+    print(f"URL completa recebida pela Meta: {request.url}")
+
+    query_params = request.url
 
     print("Parâmetros da query:")
     print(query_params)
